@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#define n 10000
+
+#define SelezioneFile "Sel.txt"
+#define Bubblefile "Bubble.txt"
+
+
+int main()
+{   
+    //Generazione array di numeri casuali
+    int ArrayNumSelez[n];
+    int ArrayNumBubble[n];
+    int i;
+ 
+    srand(time(0));
+    for (i = 0; i < n; i++) {
+    ArrayNumSelez[i] = 1 + rand()%n;
+    ArrayNumBubble[i] = 1 + rand()%n;
+    }
+    
+    int j; //Ordinamento per selezione
+    int LowerNum;
+    int NumSostituito;
+    
+    clock_t tempoInizio, tempoFine, tempoTotale;
+    tempoInizio = clock();
+    
+    for (i = 0; i < n; i++)
+    {
+        LowerNum = ArrayNumSelez[i];
+        for (j = i + 1; j < n; j++)
+        {
+            if (LowerNum > ArrayNumSelez[j])
+            {
+                LowerNum = ArrayNumSelez[j];
+                NumSostituito = ArrayNumSelez[j];
+                ArrayNumSelez[j] = ArrayNumSelez[i];
+                ArrayNumSelez[i] = NumSostituito;
+            }
+        }
+    }
+    
+    tempoFine = clock();
+    tempoTotale = (double)(tempoFine - tempoInizio);
+    
+    /*for (i = 0; i < n; i++) //Stampo l'array selezione
+    {
+        printf("%d ", ArrayNumSelez[i]);
+    }*/
+    printf("\nIl tempo di ordinamento per selezione è: %f", tempoTotale);
+    
+    FILE*FileSelezione; //Scrittura dati su file
+    FileSelezione = fopen(SelezioneFile, "w"); 
+	fprintf(FileSelezione, "%d %f\n", n, tempoTotale)
+
+
+	tempoInizio = clock(); //Ordinamento per bolla
+
+	for (j = 0; j < n - 1; j++)
+	{
+		for (i = 0; i < n - 1; i++)
+		{
+			if (ArrayNumBubble[i] > ArrayNumBubble[i + 1])
+			{	
+				NumSostituito = ArrayNumBubble[i];
+				ArrayNumBubble[i] = ArrayNumBubble[i + 1];
+				ArrayNumBubble[i + 1] = NumSostituito;
+			}
+		}
+	}
+	tempoFine = clock();
+	tempoTotale = (double)(tempoFine - tempoInizio);
+	
+	    /*for (i = 0; i < n; i++) //Stampo l'array bubble
+    {
+        printf("%d ", ArrayNumBubble[i]);
+    }*/
+    printf("\nIl tempo di ordinamento per bolla è: %f", tempoTotale);
+	
+
+	FILE*FileBubble; //Scrittura dati su file
+	FileBubble = fopen(BubbleFile, "w");
+	fprintf(FileBubble, "%d %f\n", n, tempoTotale)
+	
+    return 0;
+}
