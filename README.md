@@ -1,2 +1,2 @@
 # OrdinamentoC
-Repository per algoritmo di ordinamento
+Repository per algoritmo di ordinamento. 
