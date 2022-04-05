@@ -1,3 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#define n 10000
+#define SelezioneFile "Sel.txt"
+#define BubbleFile "Bubble.txt"
+
+
+int main()
 {   
     //Generazione array di numeri casuali
     int ArrayNumSelez[n];
@@ -10,57 +20,61 @@
     ArrayNumBubble[i] = 1 + rand()%n;
     }
     
-    int j; //Ordinamento per selezione
+    int j, k; //Dichiarazione integer
     int LowerNum;
     int NumSostituito;
     
-    clock_t tempoInizio, tempoFine, tempoTotale;
-    tempoInizio = clock();
+    FILE*FileSelezione; //Scrittura dati su file
+    FILE*FileBubble; //Scrittura dati su file
     
-    for (i = 0; i < n; i++)
+    FileSelezione = fopen(SelezioneFile, "w"); //Apertura file
+    FileBubble = fopen(BubbleFile, "w");
+    
+    for (k = 1000; k < n; k += 1000) 
     {
-        LowerNum = ArrayNumSelez[i];
-        for (j = i + 1; j < n; j++)
+        double tempoInizio, tempoFine, tempoTotale; //Ordinamento per selezione
+        clock() == 0;
+        tempoInizio = clock();
+        
+        for (i = 0; i < n; i++)
         {
-            if (LowerNum > ArrayNumSelez[j])
+            LowerNum = ArrayNumSelez[i];
+            for (j = i + 1; j < n; j++)
             {
-                LowerNum = ArrayNumSelez[j];
-                NumSostituito = ArrayNumSelez[j];
-                ArrayNumSelez[j] = ArrayNumSelez[i];
-                ArrayNumSelez[i] = NumSostituito;
+                if (LowerNum > ArrayNumSelez[j])
+                {
+                    LowerNum = ArrayNumSelez[j];
+                    NumSostituito = ArrayNumSelez[j];
+                    ArrayNumSelez[j] = ArrayNumSelez[i];
+                    ArrayNumSelez[i] = NumSostituito;
+                }
             }
         }
+        
+        tempoFine = clock();
+        tempoTotale = (double)(tempoFine - tempoInizio) / 100;
+        printf("\nIl tempo di ordinamento per selezione è: %f", tempoTotale); 
+    	fprintf(FileSelezione, "%d %f\n", k, tempoTotale); //Calcolo tempo processamento per selezione
+    
+    	tempoInizio = clock(); //Ordinamento per bolla
+    	for (j = 0; j < n - 1; j++)
+    	{
+    		for (i = 0; i < n - 1; i++)
+    		{
+    			if (ArrayNumBubble[i] > ArrayNumBubble[i + 1])
+    			{	
+    				NumSostituito = ArrayNumBubble[i];
+    				ArrayNumBubble[i] = ArrayNumBubble[i + 1];
+    				ArrayNumBubble[i + 1] = NumSostituito;
+    			}
+    		}
+    	}
+    	tempoFine = clock();
+    	tempoTotale = (double)(tempoFine - tempoInizio) / 100;
+        printf("\nIl tempo di ordinamento per bolla è: %f", tempoTotale);
+    	fprintf(FileBubble, "%d %f\n", k, tempoTotale); 
     }
     
-    tempoFine = clock();
-    tempoTotale = (double)(tempoFine - tempoInizio) / 100;
-    printf("\nIl tempo di ordinamento per selezione è: %f", tempoTotale);
-    
-    FILE*FileSelezione; //Scrittura dati su file
-    FileSelezione = fopen(SelezioneFile, "w"); 
-	fprintf(FileSelezione, "%d %f\n", n, tempoTotale);
-
-	tempoInizio = clock(); //Ordinamento per bolla
-	for (j = 0; j < n - 1; j++)
-	{
-		for (i = 0; i < n - 1; i++)
-		{
-			if (ArrayNumBubble[i] > ArrayNumBubble[i + 1])
-			{	
-				NumSostituito = ArrayNumBubble[i];
-				ArrayNumBubble[i] = ArrayNumBubble[i + 1];
-				ArrayNumBubble[i + 1] = NumSostituito;
-			}
-		}
-	}
-	tempoFine = clock();
-	tempoTotale = (double)(tempoFine - tempoInizio) / 100;
-    printf("\nIl tempo di ordinamento per bolla è: %f", tempoTotale);
-	
-
-	FILE*FileBubble; //Scrittura dati su file
-	FileBubble = fopen(BubbleFile, "w");
-	fprintf(FileBubble, "%d %f\n", n, tempoTotale);
 	
     return 0;
 }
